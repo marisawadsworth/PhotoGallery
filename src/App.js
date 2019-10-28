@@ -4,13 +4,16 @@ import Titles from "./components/Titles";
 import Search from "./components/Search";
 
 
+
 // API Keys
 const API_KEY_UNSPLASH = "55c988ed892700787ddc70e38721e2c423b3df83bbf5a01c83b4bd64fbc49def";
+const API_KEY_PIXABAY = "14068965-be78c651b596996e93d527d27";
+// const API_KEY_IMGUR = "";
 
 
 class App extends React.Component {
   state = {
-    images: []
+    images: [],
   }
 
 fetchunsplashPhotos = async () => {
@@ -23,6 +26,16 @@ fetchunsplashPhotos = async () => {
   }); 
 };
 
+fetchpixabayPhotos = async () => {
+  let res = await fetch(`https://pixabay.com/api/?key=${API_KEY_PIXABAY}&q=roses&image_type=photo`);
+  res = await res.json();
+  console.log(res)
+  this.setState({
+    // images: res.hits(i => i.hits)
+    images: (res.hits)
+  }); 
+};
+
 render() {
   return (
     <div className="App">
@@ -30,7 +43,7 @@ render() {
       <Search fetchunsplashPhotos={this.fetchunsplashPhotos}/>
         <div className="button">
             <button onClick={this.fetchunsplashPhotos}>Unsplash</button>
-            <button>Pixabay</button>
+            <button onClick={this.fetchpixabayPhotos}>Pixabay</button>
             <button>apiDoc</button>
           </div>
         <div>

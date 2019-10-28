@@ -16,7 +16,7 @@ import React from "react";
 // };
 
 const Search = props => (
-    <form onSubmit={props.fetchunsplashPhotos} >
+    <form>
         <input type="search" id="query" placeholder="Search Image..."/>
     </form>
 );
