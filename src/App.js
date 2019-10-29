@@ -13,9 +13,16 @@ const API_KEY_PIXABAY = "14068965-be78c651b596996e93d527d27";
 
 class App extends React.Component {
   state = {
-    images: [],
+    searchText: "",
+    images: []
   }
 
+  // Search
+  onFieldChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+// Unsplash
 fetchunsplashPhotos = async () => {
   // let value = ("dogs");
   let res = await fetch(`https://api.unsplash.com/search/photos?page=1&query=dogs&client_id=${API_KEY_UNSPLASH}`);
@@ -26,14 +33,25 @@ fetchunsplashPhotos = async () => {
   }); 
 };
 
-fetchpixabayPhotos = async () => {
-  let res = await fetch(`https://pixabay.com/api/?key=${API_KEY_PIXABAY}&q=roses&image_type=photo`);
-  res = await res.json();
-  console.log(res)
-  this.setState({
-    // images: res.hits(i => i.hits)
-    images: (res.hits)
-  }); 
+// Pixabay
+// fetchpixabayPhotos = async () => { 
+//   let res = await fetch(`https://pixabay.com/api/?key=${API_KEY_PIXABAY}&q=roses&image_type=photo`);
+//   res = await res.json();
+//   console.log(res)
+//   this.setState({
+//     images: res.hits(i => i.hits)
+//     // images: res.hits(i => i.hits)
+//     // images: (res.hits)
+//   }); 
+// };
+
+fetchpixabayPhotos =  () => { 
+fetch(
+  `https://pixabay.com/api/?key=${API_KEY_PIXABAY}&q=roses&image_type=photo`
+)
+  .then(res => res.json())
+  .then(data => this.setState({ images: data.hits }))
+  .catch(err => alert(err));
 };
 
 render() {
@@ -48,9 +66,8 @@ render() {
           </div>
         <div>
           <h1>Images</h1>
-        </div><div>
-          {this.state.images.map((url, idx) => <img className="UnsplashImages" key={idx} src={url} alt="searched item"/>)}
-      </div>
+        </div>
+          {this.state.images.map((url, idx) => <img className="Images" key={idx} src={url} alt="searched item"/>)}
       </div>
     );
   }
