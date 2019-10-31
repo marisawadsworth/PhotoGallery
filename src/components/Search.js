@@ -3,7 +3,6 @@ import React from "react";
 class Search extends React.Component{
 
     state = {
-        //term = "",
         searchText: ""
     }
 
@@ -31,32 +30,6 @@ class Search extends React.Component{
         );
     }
 }
-
-// class Search extends React.Component {
-//     state = { 
-//         searchText: "", 
-//     };
-
-//     onFieldChange = e => {
-//         this.setState({ [e.target.name]: e.target.value });
-//       };
-
-//       render() {
-//         return (
-//         <div>
-//             <form onSubmit={this.state.value}> 
-//                 <input type="search" id="query"  placeholder="Search Image..."/>
-//             </form>
-//         </div>
-           
-//         )}
-// }
-
-// const Search = props => (
-//     <form>
-//         <input type="search" id="query" placeholder="Search Image..."/>
-//     </form>
-// );
 
 
 export default Search;
