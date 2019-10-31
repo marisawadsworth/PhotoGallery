@@ -13,52 +13,63 @@ const API_KEY_PIXABAY = "14068965-be78c651b596996e93d527d27";
 
 class App extends React.Component {
   state = {
-    searchText: "",
+    searchText: '',
     images: []
   }
 
-  // Search
-  onFieldChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
 
-// Unsplash
-fetchunsplashPhotos = async () => {
-  // let value = ("dogs");
-  let res = await fetch(`https://api.unsplash.com/search/photos?page=1&query=dogs&client_id=${API_KEY_UNSPLASH}`);
+  // Unsplash
+  fetchunsplashPhotos = async (e) => {
+    e.preventDefault();
+    // let searchText = ("dogs");
+    const searchText = e.target.value;
+    let res = await fetch(`https://api.unsplash.com/search/photos?page=1&query=${this.state.searchText}&client_id=${API_KEY_UNSPLASH}`);
+    res = await res.json();
+    //console.log(res)
+    if (searchText) {
+    this.setState({
+      //searchText: res.query.searchText,
+      // images: res.data.results 
+      images: res.results.map(i => i.urls.full),
+
+    }); 
+  }else {
+    this.setState({
+      error: "Please enter the value."
+    });
+  }}
+
+
+// Pixabay
+fetchpixabayPhotos = async (e) => { 
+  e.preventDefault();
+
+  
+
+  let res = await fetch(`https://pixabay.com/api/?key=${API_KEY_PIXABAY}&q=${this.state.searchText}&image_type=photo`);
   res = await res.json();
-  console.log(res)
+  //console.log(res)
   this.setState({
-      images: res.results.map(i => i.urls.full)
+    images: res.hits
+    // images: res.hits(i => i.hits)
+    // images: (res.hits)
   }); 
 };
 
-// Pixabay
-// fetchpixabayPhotos = async () => { 
-//   let res = await fetch(`https://pixabay.com/api/?key=${API_KEY_PIXABAY}&q=roses&image_type=photo`);
-//   res = await res.json();
-//   console.log(res)
-//   this.setState({
-//     images: res.hits(i => i.hits)
-//     // images: res.hits(i => i.hits)
-//     // images: (res.hits)
-//   }); 
-// };
+getSearchResults = (e) => {
+  //console.log(e.target.value)
+  this.setState({searchText : e.target.value})
 
-fetchpixabayPhotos =  () => { 
-fetch(
-  `https://pixabay.com/api/?key=${API_KEY_PIXABAY}&q=roses&image_type=photo`
-)
-  .then(res => res.json())
-  .then(data => this.setState({ images: data.hits }))
-  .catch(err => alert(err));
-};
+  console.log(this.state)
+}
+
 
 render() {
   return (
     <div className="App">
       <Titles />
-      <Search fetchunsplashPhotos={this.fetchunsplashPhotos}/>
+      <Search updateText={this.getSearchResults} />
+      {/* <Search fetchunsplashPhotos={this.fetchunsplashPhotos}/> */}
         <div className="button">
             <button onClick={this.fetchunsplashPhotos}>Unsplash</button>
             <button onClick={this.fetchpixabayPhotos}>Pixabay</button>
@@ -67,7 +78,12 @@ render() {
         <div>
           <h1>Images</h1>
         </div>
-          {this.state.images.map((url, idx) => <img className="Images" key={idx} src={url} alt="searched item"/>)}
+        
+          {this.state.images.map((url, idx) => {
+            //console.log(url);
+            // return <img className="Images" key={idx} src={url} alt="searched item"/>
+            return <img className="Images" key={idx} src={url["largeImageURL"]} alt="searched item"/>
+          })}
       </div>
     );
   }
